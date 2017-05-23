@@ -1,0 +1,70 @@
+
+
+Function SimpleTax(income As Double) As Double
+
+    Dim tax As Double
+    Dim taxrate As Double
+    
+    taxrate = 0.15
+    
+    tax = income * taxrate
+    
+    SimpleTax = tax
+
+End Function
+
+
+Function IRSTax(income As Double) As Double
+
+    Dim taxrate As Double
+
+'   Example of simple IF..Then..Else statement
+'    If income < 20000 Then
+'        taxrate = 0.02
+'    Else
+'        taxrate = 0.05
+'    End If
+    
+    'Nested IF
+    If income < 20000 Then
+        taxrate = 0.02
+        
+    ElseIf income < 50000 Then
+        taxrate = 0.05
+        
+    ElseIf income < 100000 Then
+        taxrate = 0.07
+        
+    Else
+        taxrate = 0.12
+    End If
+    
+    IRSTax = income * taxrate
+    
+End Function
+
+Function isHighIncome(income As Double) As Boolean
+
+    If income >= 100000 Then
+        isHighIncome = True
+    Else
+        isHighIncome = False
+    End If
+
+End Function
+
+Function isHighIncomeYN(income As Double) As String
+
+    If income >= 100000 Then
+        isHighIncomeYN = "Yes"
+    Else
+        isHighIncomeYN = "No"
+    End If
+
+End Function
+
+
+
+
+
+
