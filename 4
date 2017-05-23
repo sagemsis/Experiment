@@ -1,0 +1,178 @@
+Function CalcGrowth(NewVal As Double, OldVal As Double) As Double
+
+    CalcGrowth = (NewVal - OldVal) / OldVal
+End Function
+
+Sub FillGrowth()
+
+    Dim i As Integer
+    
+    For i = 2 To 219
+        Range("G" & i).Value = CalcGrowth(Range("D" & i).Value, Range("C" & i).Value)
+        Range("G" & i).NumberFormat = "0.00%"
+    Next i
+        
+End Sub
+
+
+
+Sub Copy_1()
+
+    Dim i, j As Integer
+        
+    ' copying headers from Source sheet
+    Sheet1.Range("B1", "E1").Copy
+    Sheet2.Range("A1").PasteSpecial xlPasteValues
+    
+    'setting the start row in destination sheet to 2
+    '(just below the header)
+    j = 2
+    
+    For i = 2 To 219
+        If Range("C" & i).Value > 10000 _
+            And Range("E" & i).Value >= 0.5 Then
+        
+            'Copying from sheet 1
+            Sheet1.Range("B" & i, "E" & i).Copy
+            
+            'Paste in Sheet 3, Column A, Row j, using Paste Special (Values)
+            Sheet3.Range("A" & j).PasteSpecial xlPasteValues
+            
+            'Setting the format of Golumn D (Growth %) in destination sheet
+            ' to % with 2 decimal points (0.00%)
+            Sheet3.Range("D" & j).NumberFormat = "0.00%"
+            
+            j = j + 1
+            
+        End If
+    Next i
+    
+    Sheet3.Activate
+End Sub
+
+Sub Copy_2()
+
+    Dim i, j As Integer
+    j = 2
+    
+    For i = 2 To 219
+        If Sheet1.Range("C" & i).Value > 10000 And _
+            Sheet1.Range("E" & i).Value >= 0.5 Then
+        
+            Sheet3.Range("D" & j).NumberFormat = "0.00%"
+                
+            Sheet3.Range("A" & j).Value = Sheet1.Range("B" & i).Value
+            Sheet3.Range("B" & j).Value = Sheet1.Range("C" & i).Value
+            Sheet3.Range("C" & j).Value = Sheet1.Range("D" & i).Value
+            Sheet3.Range("D" & j).Value = Sheet1.Range("E" & i).Value
+            
+            j = j + 1
+            
+        End If
+    Next i
+    
+    Sheet3.Activate
+End Sub
+
+
+Sub Copy_3()
+
+    Dim i As Integer, j As Integer
+    Dim Country As String
+    Dim pop_2000, pop_2015, growth_rat As Double
+    
+    j = 2
+    For i = 2 To 219
+        Country = Sheet1.Range("b" & i).Value
+        pop_2000 = Sheet1.Range("c" & i).Value
+        pop_2015 = Sheet1.Range("d" & i).Value
+        growth_rate = Sheet1.Range("e" & i).Value
+        
+        If pop_2000 > 10000 And growth_rate >= 0.5 Then
+            Sheet2.Range("a" & j).Value = Country
+            Sheet2.Range("b" & j).Value = pop_2000
+            Sheet2.Range("c" & j).Value = pop_2015
+            Sheet2.Range("d" & j).Value = growth_rate
+            j = j + 1
+        End If
+                    
+    Next i
+        Sheet3.Activate
+End Sub
+
+Sub Copy_4()
+    
+    Dim i, j As Integer
+    j = 2
+ 
+    For i = 2 To 219
+        If Sheet1.Range("C" & i).Value > 10000 And _
+         Sheet1.Range("E" & i).Value >= 0.5 Then
+            Sheet3.Range("A" & j, "D" & j).Value = Sheet1.Range("B" & i, "E" & i).Value
+            j = j + 1
+
+        End If
+    Next i
+    
+    Sheet3.Activate
+End Sub
+
+
+Sub Macro1()
+
+    Dim userInput As String
+    
+    userInput = InputBox("enter letter to filter by")
+    
+    'If  userInput = "" Then
+    If Trim(userInput) = "" Then
+        MsgBox "Invalid input"
+        Exit Sub
+    End If
+    
+    
+    userInput = Left(userInput, 1)
+    userInput = UCase(userInput)
+    
+    If Asc(userInput) < 65 Or Asc(userInput) > 90 Then
+        MsgBox "invalid charachter"
+        Exit Sub
+    End If
+        
+    ActiveSheet.Range("$A$1:$I$219").AutoFilter Field:=2, Criteria1:=userInput & "*", _
+        Operator:=xlAnd
+End Sub
+
+
+
+Sub Macro2()
+    Dim userInput As String
+    userInput = InputBox("enter letter to filter by")
+    
+    'If  userInput = "" Then
+    If Trim(userInput) = "" Then
+        MsgBox "Invalid input"
+        Exit Sub
+    End If
+    
+    userInput = Val(userInput)
+    
+    If userInput <= 0 Then
+        MsgBox "Invalid input"
+        Exit Sub
+    End If
+    
+'    userInput = Left(userInput, 1)
+'    userInput = UCase(userInput)
+'
+'    If Asc(userInput) < 65 Or Asc(userInput) > 90 Then
+'        MsgBox "invalid charachter"
+'        Exit Sub
+'    End If
+       
+    ActiveSheet.Range("$A$1:$I$219").AutoFilter Field:=3, Criteria1:="<" & userInput, _
+        Operator:=xlAnd
+End Sub
+
+
+
