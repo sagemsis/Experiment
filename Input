@@ -1,0 +1,58 @@
+Sub getsheetscount()
+    MsgBox Sheets.Count
+    
+End Sub
+
+
+Sub Test_Input()
+
+    Dim UserInput As String
+    
+    UserInput = InputBox("Type something:")
+
+    'check if blank
+     If Len(UserInput) = 0 Then
+        MsgBox "Invalid input (blank) "
+        Exit Sub
+    End If
+    
+    ' length criteria: <10 char.
+    If Len(UserInput) >= 10 Then
+        MsgBox "Invalid input (length >10) "
+        Exit Sub
+    End If
+    
+    
+    
+    Range("A1").Value = UserInput
+    MsgBox "you entered " & UserInput
+
+    
+    
+
+End Sub
+
+
+
+
+Sub Add_Input()
+       ' this macro adds two numbers.. it prompts the user to key in the numbers.
+    Dim x, y, z As Double
+    
+    Dim UserInput As String
+    
+    UserInput = InputBox("Enter first number:")
+    
+    x = Val(UserInput)
+    
+    
+    UserInput = InputBox("Enter 2nd number:")
+    
+    y = Val(UserInput)
+    
+    z = x + y
+
+    MsgBox "The total is " & z
+
+End Sub
+
