@@ -1,0 +1,20 @@
+Sub Button1_Click()
+
+    Dim j As Integer
+    j = 2
+    
+    Sheet1.Activate
+    
+    For i = 2 To 150000
+        'If IsEmpty(Range("A" & i)) Then Exit For
+     
+        If Range("A" & i).Value > 500000 Then
+            Sheet2.Range("A" & j).Value = Range("A" & i).Value
+            j = j + 1
+        End If
+        
+       
+    Next i
+    
+    Sheet2.Activate
+End Sub
