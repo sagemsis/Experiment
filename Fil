@@ -1,0 +1,85 @@
+
+
+
+Sub ApplyFilterCondition()
+'
+' condition Macro
+'
+
+'
+    
+Dim Cat1, Cat2, Cat3, Cat4 As String
+
+Cat1 = Sheets("Checkbox").Range("H2").Value
+Cat2 = Sheets("Checkbox").Range("H3").Value
+Cat3 = Sheets("Checkbox").Range("H4").Value
+Cat4 = Sheets("Checkbox").Range("H5").Value
+
+Sheets("Data").Select
+Range("D1").Select
+
+Selection.AutoFilter
+
+ActiveSheet.Range("$A$1:$I$116").AutoFilter Field:=7, Criteria1:=Array(Cat1, Cat2, Cat3, Cat4), Operator:=xlFilterValues
+
+End Sub
+
+
+Sub ApplyFilterConditionTable()
+'
+' condition Macro
+'
+
+'
+    
+Dim Cat1, Cat2, Cat3, Cat4 As String
+
+Cat1 = Sheets("Checkbox").Range("H2").Value
+Cat2 = Sheets("Checkbox").Range("H3").Value
+Cat3 = Sheets("Checkbox").Range("H4").Value
+Cat4 = Sheets("Checkbox").Range("H5").Value
+
+Sheets("Data").Select
+Range("D1").Select
+
+Selection.AutoFilter
+
+ActiveSheet.Range("tblInventory").AutoFilter Field:=7, Criteria1:=Array(Cat1, Cat2, Cat3, Cat4), Operator:=xlFilterValues
+
+End Sub
+
+
+
+Sub ApplyFilterFemale()
+'
+' condition Macro
+'
+Sheets("Data").Select
+
+Range("tblInventory").AutoFilter _
+    Field:=3, _
+    Criteria1:="Female", _
+    Operator:=xlFilterValues
+
+End Sub
+
+Sub FilterByValue()
+
+Dim UserValue As Double
+
+    
+    If IsEmpty(Sheet1.Range("F4").Value) Then
+        MsgBox "Invalid Input"
+        Exit Sub
+    End If
+    
+    UserValue = Sheet1.Range("F4").Value
+    
+    Sheets("Data").Activate
+
+ActiveSheet.Range("tblInventory").AutoFilter _
+    Field:=9, _
+    Criteria1:="<" & UserValue, _
+    Operator:=xlFilterValues
+End Sub
+
