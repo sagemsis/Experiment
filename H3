@@ -1,0 +1,28 @@
+Function CalcComm(saleAmount As Double, saleDate As Date) As Double
+    
+If saleAmount < 10000 Then
+    CalcComm = (saleAmount) * (0.03)
+    ElseIf saleAmount < 25000 Then
+    CalcComm = saleAmount * 0.04
+    ElseIf saleAmount >= 25000 Then
+    CalcComm = saleAmount * 0.06
+End If
+
+If Month(saleDate) = 1 Or Month(saleDate) = 2 Or Month(saleDate) = 12 Then
+    CalcComm = CalcComm * 1.5
+End If
+End Function
+
+
+Function salesQuarter(saleDate As Date) As String
+If Month(saleDate) = 1 Or Month(saleDate) = 2 Or Month(saleDate) = 3 Then
+    salesQuarter = "Q1"
+    ElseIf Month(saleDate) = 4 Or Month(saleDate) = 5 Or Month(saleDate) = 6 Then
+    salesQuarter = "Q2"
+    ElseIf Month(saleDate) = 7 Or Month(saleDate) = 8 Or Month(saleDate) = 9 Then
+    salesQuarter = "Q3"
+    ElseIf Month(saleDate) = 10 Or Month(saleDate) = 11 Or Month(saleDate) = 12 Then
+    salesQuarter = "Q4"
+    End If
+End Function
+
