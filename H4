@@ -1,0 +1,121 @@
+Option Explicit
+
+Function calcGrowth(startingNumber As Double, endingNumber As Double) As Double
+
+calcGrowth = ((endingNumber - startingNumber) / startingNumber)
+
+End Function
+
+
+
+Sub populationGrowth()
+Dim sht As Worksheet, r As Integer
+Dim rowcount As Long
+Set sht = ThisWorkbook.Worksheets("Source")
+rowcount = sht.Cells(sht.Rows.Count, "A").End(xlUp).Row
+
+For r = 3 To rowcount
+
+Range("G" & r) = calcGrowth(Range("C" & r), Range("D" & r))
+
+Next r
+End Sub
+
+
+
+Sub filterByFirstLetterOfCountry()
+    Dim userInput, badUserInput As String
+    Dim IsAlphabet As Boolean
+        
+    userInput = UCase(InputBox("What starting letter would you like to filter by?"))
+
+    'Check for Blank
+    If Len(userInput) < 1 Then
+        MsgBox "Error: Input Blank"
+        Exit Sub
+    End If
+
+    'Check to make sure Alpha only
+    IsAlphabet = Asc(userInput) > 64 And Asc(userInput) < 91
+    If IsAlphabet = False Then
+    badUserInput = userInput
+    MsgBox "Error: Non Alphabetical Input Entered " & badUserInput & " "
+    Exit Sub
+    End If
+
+    'Single Letter Only
+    If Len(userInput) > 1 Then
+        badUserInput = userInput
+        userInput = Left(userInput, 1)
+        MsgBox "Input Value '" & badUserInput & "' truncated to first letter only." & vbNewLine & "Filtering for countries starting with first letter '" & userInput & "' "
+    End If
+        
+    ActiveSheet.ListObjects("CountryPopulation").Range.AutoFilter Field:=2, _
+    Criteria1:=userInput & "*", Operator:=xlFilterValues
+End Sub
+
+
+
+Sub filterByMaxPopulation()
+    Dim userInput As String
+            
+    userInput = InputBox("Enter Maximum Population to filter by for 2015")
+
+    'Check for Blank
+    If Len(userInput) < 1 Then
+        MsgBox "Error: Input Blank"
+        Exit Sub
+    End If
+
+    If IsNumeric(userInput) = False Then
+    MsgBox "Error: Non Numeric Input Entered"
+    Exit Sub
+    End If
+    
+    'Adjust input to match same unit as Population (in Thousands) and round down decimal values
+    userInput = Application.WorksheetFunction.RoundDown((userInput / 1000), 0)
+    userInput = Format(userInput, "0,000")
+    
+    MsgBox "Filtering for countries with 2015 population less than " & userInput & " (in Thousands)"
+
+    ActiveSheet.ListObjects("CountryPopulation").Range.AutoFilter Field:=4, _
+    Criteria1:="<" & userInput, Operator:=xlFilterValues
+
+End Sub
+
+
+Sub AutoFilter_Remove()
+ActiveSheet.ListObjects("CountryPopulation").Range.AutoFilter Field:=2
+ActiveSheet.ListObjects("CountryPopulation").Range.AutoFilter Field:=4
+
+End Sub
+
+
+Sub copyCountriesToNewSheet()
+Dim src, copy As Worksheet, r, line As Integer, rowcount As Long
+
+Set src = ThisWorkbook.Worksheets("Source")
+Set copy = ThisWorkbook.Worksheets("Copy")
+
+rowcount = src.Cells(src.Rows.Count, "A").End(xlUp).Row
+line = 2
+
+For r = 3 To rowcount
+
+If src.Range("C" & r).Value >= 10000 And src.Range("F" & r).Value >= 0.5 Then
+'Country
+   copy.Range("A" & line).Value = src.Range("B" & r).Value
+'2000 Population
+   copy.Range("B" & line).Value = src.Range("C" & r).Value
+'2015 Population
+   copy.Range("C" & line).Value = src.Range("D" & r).Value
+'Growth
+   copy.Range("D" & line).Value = src.Range("E" & r).Value
+
+line = line + 1
+End If
+Next r
+End Sub
+
+
+
